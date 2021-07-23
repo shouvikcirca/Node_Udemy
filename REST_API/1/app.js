@@ -3,9 +3,10 @@ const bodyParser = require('body-parser');
 const multer = require('multer');   
 const mongoose  =require('mongoose');
 const path = require('path')
+require('dotenv').config();
 
 const feedRoutes = require('./routes/feed');
-
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -45,20 +46,25 @@ app.use((req, res, next) => {
 })
 
 app.use('/feed', feedRoutes);
+app.use('/auth', authRoutes);
+
+
 
 
 app.use((error, req, res, next) => {
     console.log(error);
     const status = error.statusCode || 500;
     const message = error.message;
-    return res(status).json({
-        message: message
+    const data = error.data;
+    res.status(status).json({
+        message: message,
+        data: data
     });
 });
 
 // In the below URL, messages is the name of the database
 mongoose.connect(
-    'mongodb+srv://s4ouvik:microwis@cluster0.czjrh.mongodb.net/messages?retryWrites=true&w=majority'
+    process.env.MONGODB_TOKEN
 )
 .then(result => {
     app.listen(8080);
