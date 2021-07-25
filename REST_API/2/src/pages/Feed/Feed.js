@@ -40,7 +40,7 @@ class Feed extends Component {
   loadPosts = direction => {
     if (direction) {
       this.setState({ postsLoading: true, posts: [] });
-    }
+    }  
     let page = this.state.postPage;
     if (direction === 'next') {
       page++;
@@ -50,7 +50,11 @@ class Feed extends Component {
       page--;
       this.setState({ postPage: page });
     }
-    fetch('http://localhost:8080/feed/posts?page=' + page)
+    fetch('http://localhost:8080/feed/posts?page=' + page, {
+      headers: {
+        Authorization: 'Bearer ' + this.props.token  // Bearer is a convention used for JSONWebTokens. Not a must.
+      }
+    })
       .then(res => {
         if (res.status !== 200) {
           throw new Error('Failed to fetch posts.');

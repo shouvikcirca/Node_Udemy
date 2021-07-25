@@ -45,6 +45,8 @@ exports.login = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     let loadedUser;
+
+    console.log('Inside exports.login')
     
     User.findOne({
         email: email
