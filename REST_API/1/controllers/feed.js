@@ -38,6 +38,8 @@ exports.getPosts = (req, res, next) => {
 };
 
 exports.createPost = (req, res, next) => {
+
+    console.log('hit createPosts')
     const errors = validationResult(req)
     if(!errors.isEmpty())
     {
@@ -222,8 +224,15 @@ exports.deletePost = (req, res, next) => {
         return Post.findByIdAndRemove(postId);
     })
     .then(result => {
-        console.log(result);
-        return res.status(200).json({
+        return User.findById(req.userId);
+    })
+    .then(user => {
+           
+        user.posts.pull(postId);
+        return user.save();
+    })
+    .then(result => {
+        res.status(200).json({
             message: 'Deleted post'
         })
     })

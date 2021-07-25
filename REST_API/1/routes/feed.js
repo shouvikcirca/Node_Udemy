@@ -17,7 +17,7 @@ router.get('/posts', isAuth, feedController.getPosts);
 
 
 // POST /feed/posts 
-router.post('/post', isAuth, [
+router.post('/posts', isAuth, [
     body('title').trim().isLength({min: 5}),
     body('content').trim().isLength({min :5})
 ],
